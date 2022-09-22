@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "PORT=5001 nodemon ."
+    "start": "node index",
+    "dev": "PORT=5001 nodemon . -e graphql,js,json"
   },
   "keywords": [],
   "author": "",

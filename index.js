@@ -3,41 +3,8 @@ const { buildSubgraphSchema } = require("@apollo/subgraph");
 const lifts = require("./lift-data.json");
 const fs = require("fs");
 
-const typeDefs = gql`
-  extend schema
-    @link(
-      url: "https://specs.apollo.dev/federation/v2.0",
-      import: ["@key"]
-    )
-
-  type Lift @key(fields: "id") {
-    id: ID!
-    name: String!
-    status: LiftStatus!
-    capacity: Int!
-    night: Boolean!
-    elevationGain: Int!
-    trailAccess: [Trail!]!
-  }
-
-  type Trail @key(fields: "id") {
-    id: ID!
-    liftAccess: [Lift!]!
-  }
-  enum LiftStatus {
-    OPEN
-    HOLD
-    CLOSED
-  }
-  type Query {
-    allLifts(status: LiftStatus): [Lift!]!
-    Lift(id: ID!): Lift!
-    liftCount(status: LiftStatus): Int!
-  }
-  type Mutation {
-    setLiftStatus(id: ID!, status: LiftStatus!): Lift!
-  }
-`;
+const gqlFile = fs.readFileSync("./lifts-schema.graphql", "UTF-8")
+const typeDefs = gql(gqlFile)
 
 const resolvers = {
   Query: {
